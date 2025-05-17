@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard | Budgeto</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+</head>
+<body>
+  <header class="dashboard-header">
+    <div class="logo">Budgeto</div>
+    <div class="user-info">
+      Logged in as: <strong><?php session_start(); echo $_SESSION['email'] ?? 'Guest'; ?></strong>
+      <a href="#" id="logout-btn" class="logout-btn">Logout</a>
+    </div>
+  </header>
+
+  <main class="dashboard-container">
+    <!-- Summary Cards -->
+    <section class="summary-section">
+      <div class="card income-card">
+        <h3>Total Income</h3>
+        <p id="totalIncome">₹0.00</p>
+      </div>
+      <div class="card expense-card">
+        <h3>Total Expenses</h3>
+        <p id="totalExpenses">₹0.00</p>
+      </div>
+      <div class="card balance-card">
+        <h3>Current Balance</h3>
+        <p id="currentBalance">₹0.00</p>
+      </div>
+    </section>
+
+    <!-- Budget Form -->
+    <section class="budget-section">
+      <h2>Set Your Monthly Budget</h2>
+      <form id="budgetForm">
+        <input type="number" id="budgetAmount" placeholder="Enter monthly budget (₹)" required />
+        <button type="submit" class="btn-primary">Save Budget</button>
+      </form>
+      <p class="note">You’ll be alerted when expenses exceed your set budget.</p>
+    </section>
+
+    <!-- Charts -->
+    <section class="chart-section">
+      <h2>Spending by Category</h2>
+      <canvas id="spendingChart" height="100"></canvas>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>
