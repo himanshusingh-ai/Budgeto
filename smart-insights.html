@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI & Smart Insights - Budgeto</title>
+  <style>
+    /* Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #E1E5F2;
+      color: #022B3A;
+      min-height:100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 30px 20px;
+    }
+
+    header {
+      width: 110%;
+      max-width:1380px;
+      margin-bottom:30px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      color: #1F7A8C;
+      margin-bottom: 10px;
+      letter-spacing: 2px;
+    }
+
+    header p {
+      color: #022B3A;
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .container {
+      width:200%;
+      max-width:1200px;
+      background: #FFFFFF;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(1, 39, 57, 0.15);
+      padding: 30px 40px;
+    }
+
+    .section {
+      margin-bottom: 35px;
+      border-left: 6px solid #1F7A8C;
+      padding-left: 20px;
+    }
+
+    .section h2 {
+      color: #022B3A;
+      font-size: 1.8rem;
+      margin-bottom: 15px;
+      font-weight: 700;
+    }
+
+    .insights-list {
+      list-style-type: disc;
+      margin-left: 20px;
+      color: #022B3A;
+      font-size: 1.1rem;
+      line-height: 1.5;
+      font-weight: 500;
+    }
+
+    .empty-message {
+      font-style: italic;
+      color: #1F7A8C;
+      font-weight: 600;
+      font-size: 1.05rem;
+    }
+
+    .budget-prediction {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #022B3A;
+      background-color: #BFDBF7;
+      padding: 18px 25px;
+      border-radius: 10px;
+      max-width: 400px;
+      margin: 0 auto;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(31, 122, 140, 0.3);
+    }
+
+    footer {
+      margin-top: 50px;
+      font-size:1rem;
+      color: #1F7A8C;
+      text-align: center;
+      max-width: 900px;
+      width: 100%;
+    }
+
+    /* Responsive */
+    @media (max-width:600px){
+      .container {
+        padding: 25px 20px;
+      }
+
+      header h1 {
+        font-size: 2rem;
+      }
+
+      .section h2 {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+<header style="background-color:#022B3A ; color: white; padding: 25px">
+  <nav style="display: flex; justify-content: space-between; align-items:center; max-width: 1300px; margin: auto;">
+    <div style="font-size: 24px; font-weight: bold; margin-left: 10;">AI & Smart Insights</div>
+    <ul style="display: flex; list-style: none; gap: 20px; padding: 0; margin: 0; font-size:17px">
+      <li><a href="index.html" style="color: white; text-decoration: none;">Home</a></li>
+      <li><a href="dashboard.html" style="color: white; text-decoration: none;">Dashboard</a></li>
+      <li><a href="expense.html" style="color: white; text-decoration: none;">Income & Expense</a></li>
+      <p id="userEmail" style="color:white; text-align:right; margin-right: 15px;"></p>
+    </ul>
+  </nav>
+</header>
+
+  <main class="container">
+    <section class="section" id="insights-section">
+      <h2>Smart Insights & Tips</h2>
+      <ul id="insights-list" class="insights-list">
+        <li class="empty-message">Loading insights...</li>
+      </ul>
+    </section>
+
+    <section class="section" id="prediction-section">
+      <h2>Expense Prediction</h2>
+      <div id="predicted-expense" class="budget-prediction">Loading prediction...</div>
+    </section>
+
+    <section class="section" id="budget-section">
+      <h2>Budget Recommendation</h2>
+      <div id="budget-recommendation" class="budget-prediction">Loading recommendation...</div>
+    </section>
+  </main>
+
+  <footer style="text-align:center; padding: 15px; margin-top: 40px; color: #022B3A;">
+  &copy; 2025 Budgeto | Designed for students and individuals living away from home
+</footer>
+
+  <script>
+    async function loadSmartInsights() {
+      try {
+        const response = await fetch('php/get-smart-insights.php', {
+          credentials: 'include'
+        });
+        if (!response.ok) throw new Error('Failed to fetch insights.');
+
+        const data = await response.json();
+
+        
+        // Insights list
+        const insightsList = document.getElementById('insights-list');
+        if (data.insights && data.insights.length > 0) {
+          insightsList.innerHTML = '';
+          data.insights.forEach(insight => {
+            const li = document.createElement('li');
+            li.textContent = insight;
+            insightsList.appendChild(li);
+          });
+        } else {
+          insightsList.innerHTML = '<li class="empty-message">No insights available at the moment.</li>';
+        }
+
+        // Expense prediction
+        const predictedElem = document.getElementById('predicted-expense');
+        if (data.predicted_expense && data.predicted_expense > 0) {
+          predictedElem.textContent = `Your predicted expenses for next month: ₹${data.predicted_expense.toFixed(2)}`;
+        } else {
+          predictedElem.textContent = 'Not enough data to predict expenses.';
+        }
+
+        // Budget recommendation
+        const budgetElem = document.getElementById('budget-recommendation');
+        if (data.budget_recommendation && data.budget_recommendation > 0) {
+          budgetElem.textContent = `Recommended monthly budget: ₹${data.budget_recommendation.toFixed(2)}`;
+        } else {
+          budgetElem.textContent = 'No budget recommendation available.';
+        }
+
+      } catch (error) {
+        console.error('Error loading insights:', error);
+        document.getElementById('insights-list').innerHTML = '<li class="empty-message">Error loading insights.</li>';
+        document.getElementById('predicted-expense').textContent = 'Error loading prediction.';
+        document.getElementById('budget-recommendation').textContent = 'Error loading recommendation.';
+      }
+    }
+
+    loadSmartInsights();
+  </script>
+</body>
+</html>

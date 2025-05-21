@@ -1,0 +1,163 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, #bfdbf7, #e1e5f2);
+  color: #022B3A;
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.logo {
+  font-family: 'Poppins', sans-serif;
+  font-size: 2rem;
+  color: #1F7A8C;
+}
+
+.back-link {
+  font-size: 1.25rem !important;
+  font-weight: 500;
+  color: #1F7A8C;
+  text-decoration: none;
+  display: inline-block;
+  margin-top: 5px;
+}
+
+
+.back-link:hover {
+  text-decoration: underline;
+}
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+/* Form Section */
+.form-section {
+  flex: 1 1 350px;
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(2, 43, 58, 0.1);
+}
+
+.form-section h2 {
+  font-size: 1.4rem;
+  color: #022B3A;
+  margin-bottom: 20px;
+}
+
+.form-section label {
+  display: block;
+  margin-bottom: 6px;
+  margin-top: 15px;
+  font-weight: 600;
+}
+
+.form-section input,
+.form-section select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 2px solid #BFDBF7;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.btn-primary {
+  margin-top: 20px;
+  background-color: #1F7A8C;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #022B3A;
+}
+
+/* Table Section */
+.table-section {
+  flex: 2 1 600px;
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(2, 43, 58, 0.1);
+  overflow-x: auto;
+}
+
+.table-section h2 {
+  font-size: 1.4rem;
+  color: #022B3A;
+  margin-bottom: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+thead {
+  background-color: #1F7A8C;
+  color: white;
+}
+
+thead th {
+  padding: 10px;
+  text-align: left;
+}
+
+tbody td {
+  padding: 10px;
+  border-bottom: 1px solid #d1e4f0;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f4f9fc;
+}
+
+.actions button {
+  padding: 6px 10px;
+  margin-right: 5px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.actions .edit {
+  background-color: #F4A261;
+  color: white;
+}
+
+.actions .delete {
+  background-color: #E63946;
+  color: white;
+}
+
+.actions button:hover {
+  opacity: 0.85;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+}

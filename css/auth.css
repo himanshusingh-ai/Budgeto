@@ -1,0 +1,133 @@
+/* Reset and Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, #bfdbf7, #e1e5f2);
+  color: #022B3A;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Container Layout */
+.auth-container {
+  display: flex;
+  width: 90%;
+  max-width: 1000px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 0 20px rgba(2, 43, 58, 0.2);
+  overflow: hidden;
+}
+
+/* Image Side */
+.auth-image {
+  flex: 1;
+  background-color: #E1E5F2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px;
+}
+
+.auth-image img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Form Side */
+.auth-form {
+  flex: 1;
+  padding: 50px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.logo {
+  font-family: 'Pacifico', cursive;
+  font-size: 2.5rem;
+  color: #1F7A8C;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.auth-form h2 {
+  font-weight: 700;
+  font-size: 1.8rem;
+  margin-bottom: 30px;
+  text-align: center;
+  color: #022B3A;
+}
+
+/* Input Fields */
+.auth-form input {
+  padding: 14px 16px;
+  margin-bottom: 18px;
+  border: 2px solid #BFDBF7;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: 0.3s border-color;
+}
+
+.auth-form input:focus {
+  border-color: #1F7A8C;
+  outline: none;
+}
+
+/* Buttons */
+.btn-primary {
+  background-color: #1F7A8C;
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+}
+
+.btn-primary:hover {
+  background-color: #022B3A;
+}
+
+/* Small Text & Links */
+.small-text {
+  text-align: center;
+  font-size: 0.9rem;
+  margin-top: 12px;
+  color: #022B3A;
+}
+
+.small-text a {
+  color: #1F7A8C;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.small-text a:hover {
+  color: #022B3A;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .auth-container {
+    flex-direction: column;
+  }
+
+  .auth-image {
+    display: none;
+  }
+
+  .auth-form {
+    padding: 30px 20px;
+  }
+}

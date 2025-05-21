@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dashboard | Budgeto</title>
+  <link rel="stylesheet" href="css/dashboard.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    /* Dashboard summary boxes */
+    .dashboard-summary {
+      display: flex;
+      justify-content: space-around;
+      font-size:18px;
+      font-weight: bold;
+      background: #1F7A8C;
+      color: white;
+      background: #BFDBF7;
+      padding: 20px;
+      margin: 20px auto;
+      max-width: 800px;
+      border-radius: 8px;
+    }
+
+    .summary-item {
+      text-align: center; 
+      flex: 1;
+      margin: 1px;
+      background: #1F7A8C;
+      color: white;
+      padding: 20px;
+      border-radius: 1px;
+    }
+
+    /* Budget Section */
+    .budget-section {
+      max-width: 600px;
+      font-size:18px;
+      font-weight: bold;
+      margin: 20px auto;
+      text-align: center;
+    
+    }
+
+    #budgetInput {
+      width: 70%;
+      padding: 8px;
+      max-width: 1000px;
+      font-size: 16px;
+    }
+
+    #budgetForm button {
+      padding: 8px 15px;
+      margin-left: 10px;
+      max-width: 1000px;
+      background-color: #1F7A8C;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    #budgetAlert {
+      margin-top: 10px;
+      font-weight: 600;
+      color: #d32f2f;
+    }
+
+    /* Chart container */
+    .chart-container {
+      max-width: 350px;
+      margin: 30px auto;
+    }
+  </style>
+</head>
+<body>
+  
+  <!-- Navigation Bar -->
+<header style="background-color:#022B3A ; color: white; padding: 25px">
+  <nav style="display: flex; justify-content: space-between; align-items:center; max-width: 1300px; margin: auto;">
+    <div style="font-size: 24px; font-weight: bold; margin-left: 10;">Budgeto Dashboard</div>
+    <ul style="display: flex; list-style: none; gap: 20px; padding: 0; margin: 0; font-size:17px">
+      <li><a href="index.html" style="color: white; text-decoration: none;">Home</a></li>
+      <li><a href="dashboard.html" style="color: white; text-decoration: none;">Dashboard</a></li>
+      <li><a href="expense.html" style="color: white; text-decoration: none;">Income & Expense</a></li>
+      <li><a href="smart-insights.html" style="color: white; text-decoration: none;">AI & Smart Insights</a></li>
+      <p id="userEmail" style="color:white; text-align:right; margin-right: 15px;"></p>
+
+      <li><a href="#" onclick="logout()" style="color: white; text-decoration: none;">Logout</a></li>
+    </ul>
+  </nav>
+</header>
+
+ 
+  <div class="dashboard-summary">
+    <div class="summary-item">
+      <h3>Total Income</h3>
+      <p id="totalIncome">₹0</p>
+    </div>
+    <div class="summary-item">
+      <h3>Total Expenses</h3>
+      <p id="totalExpenses">₹0</p>
+    </div>
+    <div class="summary-item">
+      <h3>Balance</h3>
+      <p id="balance">₹0</p>
+    </div>
+  </div>
+
+  <div class="budget-section">
+    <h1>Set Your Monthly Budget</h1>
+    <form id="budgetForm">
+      <input type="number" id="budgetInput" placeholder="Enter budget amount" min="0" required />
+      <button type="submit">Save Budget</button>
+    </form>
+    <p id="budgetAlert"></p>
+  </div>
+
+  <div class="chart-container">
+    <canvas id="expenseChart"></canvas>
+  </div>
+
+  <script>
+    // Check session and display email or redirect if not logged in
+    fetch('php/session.php')
+      .then(res => res.json())
+      .then(data => {
+        if (data.email && data.email !== "Guest") {
+          document.getElementById('userEmail').textContent = "Logged in as: " + data.email;
+          loadDashboard();
+        } else {
+          alert("Session expired. Redirecting to login.");
+          window.location.href = 'login.html';
+        }
+      })
+      .catch(err => {
+        console.error("Session check failed:", err);
+        alert("Error checking session. Redirecting...");
+        window.location.href = 'login.html';
+      });
+
+      fetch('php/session.php')
+      .then(res => res.json())
+      .then(data => {
+        if (data.email && data.email !== "Guest") {
+          document.getElementById('userEmail').textContent = "Logged in as: " + data.email;
+          loadDashboard();
+        } else {
+          alert("Session expired. Redirecting to login.");
+          window.location.href = 'login.html';
+        }
+      })
+      .catch(err => {
+        console.error("Session check failed:", err);
+        alert("Error checking session. Redirecting...");
+        window.location.href = 'login.html';
+      });
+      
+    // Logout function
+    function logout() {
+      fetch('php/logout.php')
+        .then(res => res.json())
+        .then(() => {
+          window.location.href = 'login.html';
+        });
+    }
+
+    // Load dashboard data function
+    function loadDashboard() {
+      // Fetch income, expenses, balance summary
+      fetch('php/get-summary.php')
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById('totalIncome').textContent = `₹${data.totalIncome.toFixed(2)}`;
+          document.getElementById('totalExpenses').textContent = `₹${data.totalExpenses.toFixed(2)}`;
+          document.getElementById('balance').textContent = `₹${data.balance.toFixed(2)}`;
+          checkBudgetAlert(data.totalExpenses);
+        })
+        .catch(err => console.error('Summary fetch error:', err));
+
+      // Fetch budget value
+      fetch('php/get-budget.php')
+        .then(res => res.json())
+        .then(data => {
+          if(data.budget) {
+            document.getElementById('budgetInput').value = data.budget;
+          }
+        })
+        .catch(err => console.error('Budget fetch error:', err));
+
+      // Fetch category-wise expense data for pie chart
+      fetch('php/get-category-summary.php')
+        .then(res => res.json())
+        .then(data => drawExpenseChart(data))
+        .catch(err => console.error('Category summary error:', err));
+    }
+
+    // Chart.js pie chart for expense categories
+    let expenseChart;
+    function drawExpenseChart(data) {
+      const ctx = document.getElementById('expenseChart').getContext('2d');
+      if(expenseChart) expenseChart.destroy();
+
+      expenseChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: data.categories,
+          datasets: [{
+            label: 'Expenses by Category',
+            data: data.amounts,
+            backgroundColor: [
+              '#022B3A', '#1F7A8C', '#BFDBF7', '#E1E5F2', '#FFFFFF', '#033649', '#3B9CA3', '#CAE4F1'
+            ],
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: {
+                color: '#022B3A',
+                font: { size: 14 }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // Handle budget save form submit
+    document.getElementById('budgetForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const budgetValue = document.getElementById('budgetInput').value;
+
+      fetch('php/save-budget.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ budget: budgetValue })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if(data.success) {
+          alert('Budget saved successfully!');
+          checkBudgetAlert(Number(budgetValue));
+        } else {
+          alert('Failed to save budget');
+        }
+      })
+      .catch(err => {
+        console.error('Save budget error:', err);
+        alert('Error saving budget');
+      });
+    });
+
+    // Show alert if expenses are close or exceed budget
+    function checkBudgetAlert(currentExpenses) {
+      const budget = Number(document.getElementById('budgetInput').value);
+      const alertElem = document.getElementById('budgetAlert');
+      if (budget > 0) {
+        if (currentExpenses > budget) {
+          alertElem.textContent = 'You have exceeded your budget!';
+        } else if (currentExpenses > 0.95 * budget) {
+          alertElem.textContent = 'Warning: You are close to your budget limit.';
+        } else {
+          alertElem.textContent = '';
+        }
+      } else {
+        alertElem.textContent = '';
+      }
+    }
+  </script>
+<footer style="text-align:center; padding: 15px; margin-top: 40px; color: #022B3A;">
+  &copy; 2025 Budgeto | Designed for students and individuals living away from home
+</footer>
+
+</body>
+</html>

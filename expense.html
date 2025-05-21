@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Expense & Income | Budgeto</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/expense.css" />
+</head>
+<body>
+  <header class="header">
+    <h1 class="logo">Budgeto</h1>
+    <a href="dashboard.html" class="back-link">← Back to Dashboard</a>
+  </header>
+
+  <div class="container">
+    <!-- Left: Add/Edit Form -->
+    <section class="form-section">
+      <h2>Add / Edit Transaction</h2>
+      <form id="transactionForm">
+        <label for="type">Type</label>
+        <select id="type" name="type" required>
+          <option value="expense">Expense</option>
+          <option value="income">Income</option>
+        </select>
+
+        <label for="category">Category</label>
+        <input type="text" id="category" name="category" placeholder="e.g. Food, Salary" required />
+
+        <label for="amount">Amount</label>
+        <input type="number" id="amount" name="amount" placeholder="e.g. 500" required />
+
+        <label for="note">Note (optional)</label>
+        <input type="text" id="note" name="note" placeholder="Add a short note" />
+
+        <label for="date">Date</label>
+        <input type="date" id="date" name="date" required />
+
+        <input type="hidden" id="transactionId" name="id" />
+        <button type="submit" class="btn-primary">Save Transaction</button>
+      </form>
+    </section>
+
+    <!-- Right: Transaction Table -->
+    <section class="table-section">
+      <h2>Transaction History</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>Category</th>
+            <th>Amount</th>
+            <th>Note</th>
+            <th>Date</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="transactionTableBody">
+          <!-- Transactions will be dynamically inserted here -->
+        </tbody>
+      </table>
+    </section>
+  </div>
+
+  <script src="js/expense.js"></script>
+<footer style="text-align:center; padding: 15px; margin-top: 40px; color: #022B3A;">
+  &copy; 2025 Budgeto | Designed for students and individuals living away from home
+</footer>
+
+</body>
+</html>
